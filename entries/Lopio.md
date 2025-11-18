@@ -1,1 +1,0 @@
-C'est un #chatoyant des plus qualitatifs
