@@ -61,14 +61,16 @@ def create_page(request):
         title = request.POST['title']
         content = request.POST['content']
         is_title_exist = util.get_entry(title)
-        if is_title_exist != None:
-            return render(request, "encyclopedia/error.html")
+        if is_title_exist is not None:
+            return render(request, "encyclopedia/error.html", {
+                "message": "This page already exists."
+            })
         else:
             util.save_entry(title, content)
-            content = md_to_html(title)
+            html_content = md_to_html(title) 
             return render(request, "encyclopedia/entry.html", {
-                title: title,
-                "content": content
+                "title": title,
+                "content": html_content
             })
 
 def edit(request):
@@ -85,8 +87,10 @@ def save_edit(request):
         title = request.POST['title']
         content = request.POST['content']
         util.save_entry(title, content)
+        html_content = md_to_html(title)
+        
         return render(request, "encyclopedia/entry.html", {
-            title: title,
-            "content": content
+            "title": title,    # <--- J'ai ajouté les guillemets autour de la clé
+            "content": html_content
         })
 
