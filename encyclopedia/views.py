@@ -11,11 +11,19 @@ def index(request):
 
 def md_to_html(title):
     content = util.get_entry(title)
-    markdowner = markdown.Markdown()
-    if content == None:
+    if content is None:
         return None
-    else:
-        return(markdowner.convert(content))
+    
+    markdowner = markdown.Markdown(extensions=[
+        'markdown.extensions.tables',
+        'markdown.extensions.fenced_code',
+        'markdown.extensions.toc',
+        'markdown.extensions.nl2br',
+        'markdown.extensions.attr_list',
+        'markdown.extensions.smarty'
+    ])
+    return markdowner.convert(content)
+
 
 def entry(request, title):
     content = md_to_html(title)

@@ -1,38 +1,143 @@
+/* ---- GLOBAL ---- */
+
 body {
     margin: 0;
-    background-color: white;
+    background: #f7f9fc;
+    font-family: "Inter", "Segoe UI", sans-serif;
+    color: #333;
+}
+
+h1, h2, h3 {
+    font-weight: 600;
+    color: #2a4b8d;
+}
+
+a {
+    color: #2a72e6;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 
 code {
     white-space: pre;
+    background: #eef2f7;
+    padding: 4px 6px;
+    border-radius: 4px;
 }
 
-h1 {
-    margin-top: 0px;
-    padding-top: 20px;
-}
-
-textarea {
-    height: 90vh;
-    width: 80%;
-}
+/* ---- MAIN CONTENT ---- */
 
 .main {
-    padding: 10px;
+    padding: 30px;
+    max-width: 900px;
+    margin: auto;
+    background: white;
+    box-shadow: 0px 0px 20px rgba(0,0,0,0.05);
+    border-radius: 10px;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
+
+/* ---- SIDEBAR ---- */
+
+.sidebar {
+    background: linear-gradient(180deg, #2a4b8d, #4e7cd1);
+    color: white;
+    height: 100vh;
+    padding: 25px;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.sidebar h2 {
+    color: white;
+    margin-top: 10px;
+    font-size: 22px;
+    letter-spacing: 0.5px;
+}
+
+.sidebar a {
+    color: #dfeaff;
+    display: block;
+    margin: 8px 0;
+}
+
+.sidebar a:hover {
+    color: white;
+    transform: translateX(3px);
+    transition: 0.1s;
+}
+
+/* ---- SEARCH BAR ---- */
 
 .search {
     width: 100%;
     font-size: 15px;
-    line-height: 15px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #cfd6e3;
+    background: white;
+    margin-bottom: 15px;
+    box-shadow: 0px 2px 4px rgba(0,0,0,0.05);
 }
 
-.sidebar {
-    background-color: #f0f0f0;
-    height: 100vh;
+.search:focus {
+    outline: none;
+    border-color: #4e7cd1;
+    box-shadow: 0px 0px 4px rgba(78, 124, 209, 0.5);
+}
+
+/* ---- TEXTAREA ---- */
+
+textarea {
+    height: 80vh;
+    width: 90%;
+    padding: 15px;
+    font-family: monospace;
+    border: 1px solid #cfd6e3;
+    border-radius: 8px;
+    background: #fbfcff;
+    box-shadow: inset 0px 1px 4px rgba(0,0,0,0.05);
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #4e7cd1;
+}
+
+/* ---- TABLES (Markdown) ---- */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: #ffffff;
+    box-shadow: 0px 1px 3px rgba(0,0,0,0.1);
+}
+
+th, td {
+    padding: 10px 12px;
+    border: 1px solid #d6dbe3;
+}
+
+th {
+    background: #e8effa;
+    color: #2a4b8d;
+    font-weight: 600;
+}
+
+tr:nth-child(even) {
+    background: #f5f7fb;
+}
+
+/* ---- SMALL UTILS ---- */
+
+.container {
+    margin-left: 260px; /* sidebar width */
     padding: 20px;
-}
-
-.sidebar h2 {
-    margin-top: 5px;
 }
