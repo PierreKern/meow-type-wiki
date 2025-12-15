@@ -62,19 +62,132 @@ Meow-Type is built with **C++** for engine and game logic, **SFML** for render a
 
 We use **CMake CPM** to handle third-party librairies.
 
-Our engine is made thanks to and **ECS**.
+Our engine is made thanks to an **ECS**.
 
 ### 2. Basic tree
 
 You can find below the **tree** of the project.
 
 ```bash
+
+├── builder
 ├── CMakeLists.txt
+├── doc
+│   └── menu.png
+├── latency.sh
 ├── README.md
 └── src
     ├── client
+    │   ├── assets
     │   ├── CMakeLists.txt
-    │   └── main.cpp
+    │   ├── game_scene
+    │   │   ├── customization
+    │   │   │   ├── create.cpp
+    │   │   │   ├── draw.cpp
+    │   │   │   ├── events.cpp
+    │   │   │   └── update.cpp
+    │   │   ├── end
+    │   │   │   ├── create.cpp
+    │   │   │   ├── draw.cpp
+    │   │   │   ├── events.cpp
+    │   │   │   └── update.cpp
+    │   │   ├── game
+    │   │   │   ├── create.cpp
+    │   │   │   ├── draw.cpp
+    │   │   │   ├── events.cpp
+    │   │   │   └── update.cpp
+    │   │   ├── game_over
+    │   │   │   ├── create.cpp
+    │   │   │   ├── draw.cpp
+    │   │   │   ├── events.cpp
+    │   │   │   └── update.cpp
+    │   │   ├── ingame_menu
+    │   │   │   ├── create.cpp
+    │   │   │   ├── draw.cpp
+    │   │   │   ├── events.cpp
+    │   │   │   └── update.cpp
+    │   │   ├── level_select
+    │   │   │   ├── create.cpp
+    │   │   │   ├── draw.cpp
+    │   │   │   ├── events.cpp
+    │   │   │   └── update.cpp
+    │   │   ├── menu
+    │   │   │   ├── create.cpp
+    │   │   │   ├── draw.cpp
+    │   │   │   ├── events.cpp
+    │   │   │   └── update.cpp
+    │   │   └── start
+    │   │       ├── create.cpp
+    │   │       ├── draw.cpp
+    │   │       ├── events.cpp
+    │   │       └── update.cpp
+    │   ├── include
+    │   │   ├── animation_renderer.hpp
+    │   │   ├── audio_manager_dummy.hpp
+    │   │   ├── audio_manager.hpp
+    │   │   ├── button_manager.hpp
+    │   │   ├── choose_skin_scene.hpp
+    │   │   ├── end.hpp
+    │   │   ├── game.hpp
+    │   │   ├── game_over.hpp
+    │   │   ├── ingame_menu.hpp
+    │   │   ├── input_manager.hpp
+    │   │   ├── keyboard_manager.hpp
+    │   │   ├── level_select_scene.hpp
+    │   │   ├── menu.hpp
+    │   │   ├── network_client.hpp
+    │   │   ├── player_config.hpp
+    │   │   ├── Protocol.hpp
+    │   │   ├── resource_manager.hpp
+    │   │   ├── scene.hpp
+    │   │   ├── scene_manager.hpp
+    │   │   ├── sprite_renderer.hpp
+    │   │   ├── start.hpp
+    │   │   └── text_renderer.hpp
+    │   ├── main.cpp
+    │   ├── readme.md
+    │   └── template
+    │       ├── animations
+    │       │   ├── animation_control.cpp
+    │       │   ├── animation_renderer.cpp
+    │       │   ├── animations_acces.cpp
+    │       │   ├── animations_basics.cpp
+    │       │   └── animations_modifications.cpp
+    │       ├── audio
+    │       │   ├── audio_manager.cpp
+    │       │   ├── music_manager.cpp
+    │       │   └── sound_manager.cpp
+    │       ├── button
+    │       │   ├── button_acces.cpp
+    │       │   ├── button_basics.cpp
+    │       │   ├── button_event.cpp
+    │       │   ├── button_manager.cpp
+    │       │   └── button_modifications.cpp
+    │       ├── input
+    │       │   ├── input_acces.cpp
+    │       │   ├── input_basics.cpp
+    │       │   ├── input_manager.cpp
+    │       │   ├── input_modifications.cpp
+    │       │   └── inputs_events.cpp
+    │       ├── ressources
+    │       │   ├── fonts.cpp
+    │       │   ├── resource_manager.cpp
+    │       │   ├── sounds.cpp
+    │       │   └── textures.cpp
+    │       ├── scenes
+    │       │   ├── scene_acces.cpp
+    │       │   ├── scene_basic.cpp
+    │       │   └── scene_loop.cpp
+    │       ├── sprites
+    │       │   ├── sprite_acces.cpp
+    │       │   ├── sprite_basics.cpp
+    │       │   ├── sprite_modifications.cpp
+    │       │   └── sprite_renderer.cpp
+    │       └── text
+    │           ├── text_acces.cpp
+    │           ├── text_basics.cpp
+    │           ├── text_modifications.cpp
+    │           └── text_renderer.cpp
     ├── Engine
     │   ├── CMakeLists.txt
     │   ├── Components
@@ -85,7 +198,11 @@ You can find below the **tree** of the project.
     │   │   ├── Registry.hpp
     │   │   └── SparseArray.hpp
     │   └── Systems
-    │       └── Systems.hpp
+    │       ├── GameSystemsHybrid.hpp
+    │       ├── LayoutSystem.hpp
+    │       ├── Systems.hpp
+    │       ├── UISystems.hpp
+    │       └── UISystemsHybrid.hpp
     └── server
         ├── CMakeLists.txt
         ├── Game.cpp
