@@ -1,27 +1,44 @@
-
 # R-Type UDP Protocol
 
-This document describes the binary protocol used by the Meow-Type/R-Type server and client. It is written so that any developer can implement a compatible UDP client from scratch without needing to dig through the codebase.
+This document describes the binary protocol used by the Meow-Type / R-Type server
+and client. It is written so that any developer can implement a compatible UDP
+client from scratch without needing to dig through the codebase.
+
+---
 
 ## Transport
 
 - **Transport:** UDP (IPv4).
-- **Default ports:** The server expects a port passed on the command line (e.g., `./rtype_server 4242`).
-- **Framing:** Each datagram contains exactly one protocol message. Messages are self-delimited by a 3-byte header.
-- **Endianness:** All multi-byte integers are **big-endian** (network byte order). Sizes are unsigned unless noted.
-- **Reliability:** UDP is fire-and-forget. The protocol keeps payloads small so the game can tolerate occasional packet loss. A client should be ready to resend transient inputs if needed.
+- **Default ports:** The server expects a port passed on the command line
+  (e.g., `./rtype_server 4242`).
+- **Framing:** Each datagram contains exactly one protocol message. Messages are
+  self-delimited by a 3-byte header.
+- **Endianness:** All multi-byte integers are **big-endian** (network byte order).
+  Sizes are unsigned unless noted.
+- **Reliability:** UDP is fire-and-forget. The protocol keeps payloads small so
+  the game can tolerate occasional packet loss. Clients should be ready to resend
+  transient inputs if needed.
+
+---
 
 ## Message header
 
 Every packet starts with a 3-byte header:
 
 | Offset | Size | Name | Description |
-| ------ | ---- | ----- | ----------- |
+| ------ | ---- | ---- | ----------- |
 | 0 | 1 | type | `MessageType` enum value (see below) |
 | 1 | 2 | size | Total packet size **including** the 3-byte header |
-The server/client helper `make_header` writes this header and reserves space for the payload, while `parse_header` validates it when deserializing. A packet is only processed when `size` exactly matches the datagram length.【F:src/server/include/Protocol.hpp†L10-L46】【F:src/server/include/Protocol.hpp†L115-L137】
 
-### Message type enum
+The server/client helper `make_header` writes this header and reserves space for
+the payload, while `parse_header` validates it when deserializing.
+
+A packet is only processed when `size` exactly matches the datagram length.
+Invalid packets must be discarded safely.
+
+---
+
+## Message type enum
 
 | Enum value | Hex | Direction | Purpose |
 | ---------- | --- | --------- | ------- |
@@ -29,8 +46,8 @@ The server/client helper `make_header` writes this header and reserves space for
 | `SERVER_WELCOME` | `0x02` | Server → Client | Confirms the connection and assigns a player ID. |
 | `CLIENT_DISCONNECT` | `0x03` | Client → Server | Graceful disconnect notification. |
 | `INPUT` | `0x10` | Client → Server | Single-frame input (movement + actions). |
-| `ENTITY_CREATE` | `0x20` | Server → Client | Spawns an entity with initial position and type. |
-| `ENTITY_UPDATE` | `0x21` | Server → Client | Updates an entity’s position/type. |
+| `ENTITY_CREATE` | `0x20` | Server → Client | Spawns an entity with initial position and life. |
+| `ENTITY_UPDATE` | `0x21` | Server → Client | Authoritative entity state update. |
 | `ENTITY_DESTROY` | `0x22` | Server → Client | Removes an entity from the world. |
 | `PLAYER_LEFT` | `0x24` | Server → Client | Notifies that a player disconnected. |
 | `ENTITY_HIT` | `0x25` | Server → Client | Damage notification. |
@@ -38,59 +55,111 @@ The server/client helper `make_header` writes this header and reserves space for
 | `ENTITY_MOVE` | `0x27` | Server → Client | Velocity update plus position. |
 | `ENTITY_DEATH` | `0x28` | Server → Client | Entity death with killer ID. |
 | `ENTITY_SHOOT` | `0x29` | Server → Client | Projectile creation from a shooter. |
+| `ENTITY_ACK` | `0x2A` | Client → Server | Acknowledges an authoritative entity update. |
+
+---
+
+## Entity types
+
+| Value | Meaning |
+| ----- | ------- |
+| 1 | PLAYER |
+| 2 | MONSTER |
+| 3 | PLAYER_MISSILE |
+| 4 | ENEMY_MISSILE |
+| 5 | OBSTACLE |
+| 6 | POWERUP |
+
+---
 
 ## Connection lifecycle
 
 1. **Client starts UDP socket** bound to any local port.
 2. **Send `CLIENT_HELLO`:**
+   - Fields: `clientNonce (uint32)`, `name[16]` (ASCII, null-padded).
+3. **Receive `SERVER_WELCOME`:**
+   - Server replies with `playerId (uint16)`.
+4. **Snapshot delivery:**
+   - Immediately after `SERVER_WELCOME`, the server sends a snapshot of the
+     current world using `ENTITY_CREATE` packets.
+5. **Live updates:**
+   - Client sends `INPUT` packets every frame.
+   - Server broadcasts entity state using `ENTITY_MOVE`, `ENTITY_UPDATE`,
+     `ENTITY_SHOOT`, `ENTITY_DESTROY`, etc.
+6. **Disconnect:**
+   - Client may send `CLIENT_DISCONNECT`.
+   - Server broadcasts `PLAYER_LEFT` to remaining clients.
 
-- Fields: `clientNonce` (`uint32`), `name[16]` (ASCII, null-padded if shorter).【F:src/server/include/Protocol.hpp†L48-L60】【F:src/server/include/Protocol.hpp†L169-L182】
-- The nonce is user-chosen; it can be random for debugging/log correlation.
-
-3. **Receive `SERVER_WELCOME`:** server replies with `playerId` (`uint16`).【F:src/server/include/Protocol.hpp†L52-L58】【F:src/server/include/Protocol.hpp†L140-L147】
-4. **Snapshot delivery:** immediately after `SERVER_WELCOME`, the server sends an entity snapshot (`ENTITY_CREATE` packets) so the client renders current state before live updates.【F:src/server/Game.cpp†L217-L231】
-5. **Live updates:** client sends `INPUT` packets every frame; server broadcasts entity state (`ENTITY_MOVE`, `ENTITY_UPDATE`, `ENTITY_SHOOT`, `ENTITY_DESTROY`, etc.).【F:src/server/Game.cpp†L204-L230】【F:src/server/Game.cpp†L330-L372】
-6. **Disconnect:** client may send `CLIENT_DISCONNECT`; server also broadcasts `PLAYER_LEFT` when a player exits (message type reserved, not yet serialized in codebase but part of the enum).【F:src/server/include/Protocol.hpp†L11-L33】【F:src/server/include/Protocol.hpp†L62-L66】
+---
 
 ## Packet payloads
 
-Below are the binary layouts (immediately after the 3-byte header). All multi-byte fields are big-endian.
+Below are the binary layouts (immediately after the 3-byte header).
+All multi-byte fields are big-endian.
+
+---
 
 ### Client → Server
 
-- **CLIENT_HELLO (0x01)**
+#### CLIENT_HELLO (0x01)
 - `uint32 clientNonce`
 - `char name[16]`
-- **INPUT (0x10)**
+
+#### INPUT (0x10)
 - `uint16 playerId`
-- `uint8 directionFlags` — 0=UP, 1=DOWN, 2=LEFT, 3=RIGHT【F:src/server/include/Protocol.hpp†L68-L76】
-- `uint8 actionFlags` — bitfield, bit0 = FIRE
-- **CLIENT_DISCONNECT (0x03)**
+- `uint8 directionFlags` — bitfield: bit0=UP, bit1=DOWN, bit2=LEFT, bit3=RIGHT
+- `uint8 actionFlags` — bitfield: bit0=FIRE
+
+#### CLIENT_DISCONNECT (0x03)
 - `uint16 playerId`
+
+#### ENTITY_ACK (0x2A)
+Acknowledges reception of an authoritative entity update.
+- `uint16 entityId`
+- `uint32 updateId`
+
+---
 
 ### Server → Client
 
-- **SERVER_WELCOME (0x02)**
-- `uint16 playerId` (server-assigned)【F:src/server/include/Protocol.hpp†L52-L58】
-- **ENTITY_CREATE (0x20)**
+#### SERVER_WELCOME (0x02)
+- `uint16 playerId`
+
+---
+
+#### ENTITY_CREATE (0x20)
 - `uint16 entityId`
-- `uint8 entityType` — see `EntityType` enum (1=PLAYER, 2=MONSTER, 3=PLAYER_MISSILE, 4=ENEMY_MISSILE, 5=OBSTACLE, 6=POWERUP)【F:src/server/include/Protocol.hpp†L35-L46】
+- `uint8 entityType`
 - `uint16 x`
 - `uint16 y`
-- **ENTITY_UPDATE (0x21)**
-- Same layout as `ENTITY_CREATE` (updates position/type).【F:src/server/include/Protocol.hpp†L78-L93】
-- **ENTITY_MOVE (0x27)**
+- `uint16 live`
+
+---
+
+#### ENTITY_UPDATE (0x21)
+Authoritative state update.
+- `uint16 entityId`
+- `uint8 entityType`
+- `uint16 x`
+- `uint16 y`
+- `uint16 live`
+- `uint32 score`
+- `uint32 updateId`
+
+---
+
+#### ENTITY_MOVE (0x27)
+Movement update with velocity.
 - `uint16 entityId`
 - `uint8 entityType`
 - `int16 vx`
 - `int16 vy`
 - `uint16 x`
 - `uint16 y`
-- **ENTITY_DEATH (0x28)**
-- `uint16 entityId`
-- `uint8 entityType`
-- `uint16 killerId`
-- **ENTITY_SHOOT (0x29)**
+
+---
+
+#### ENTITY_SHOOT (0x29)
 - `uint16 shooterId`
 - `uint16 projectileId`
 - `uint8 projectileType`
@@ -98,20 +167,69 @@ Below are the binary layouts (immediately after the 3-byte header). All multi-by
 - `uint16 y`
 - `int16 vx`
 - `int16 vy`
-- **ENTITY_DESTROY (0x22)**
+
+---
+
+#### ENTITY_DEATH (0x28)
 - `uint16 entityId`
-- **ENTITY_HIT (0x25)**
+- `uint8 entityType`
+- `uint16 killerId`
+
+---
+
+#### ENTITY_DESTROY (0x22)
+- `uint16 entityId`
+
+---
+
+#### ENTITY_HIT (0x25)
 - `uint16 attackerId`
 - `uint16 targetId`
 - `uint8 damage`
 - `uint8 remainingHp`
-- **ENTITY_COLLISION (0x26)**
+
+---
+
+#### ENTITY_COLLISION (0x26)
 - `uint16 entityA`
 - `uint16 entityB`
 - `uint8 collisionType` — 0=OBSTACLE, 1=BLOCK, 2=HURT, 3=POWERUP
 - `uint8 impactForce`
-- **PLAYER_LEFT (0x24)**
+
+---
+
+#### PLAYER_LEFT (0x24)
 - `uint16 playerId`
+
+---
+
+## ACK pattern (ENTITY_ACK)
+
+UDP does not guarantee delivery or ordering.  
+Only **authoritative state updates** (`ENTITY_UPDATE`) are acknowledged.
+
+### Client behavior
+- Track the last applied `updateId` per entity.
+- Ignore updates with `updateId <= lastAppliedUpdateId`.
+- After applying an update, send `ENTITY_ACK(entityId, updateId)`.
+
+### Server behavior
+- Keep the last authoritative `ENTITY_UPDATE` per entity and per client.
+- If no ACK is received after a short timeout, resend the update.
+- High-frequency packets (`ENTITY_MOVE`, `INPUT`) are **never acknowledged**.
+
+This pattern improves robustness without turning the protocol into TCP.
+
+---
+
+## Entity interpolation (client-side)
+
+Because UDP packets may arrive with jitter, clients should smooth movement.
+
+### Interpolation
+- Keep a short history of received entity states.
+- Render the world slightly in the past (e.g. 100 ms).
+- Interpolate between the two surrounding states.
 
 ## Serialization helpers
 
