@@ -5,8 +5,9 @@
 {% endblock %}
 
 {% block body %}
-    <h1>All Pages</h1>
-
+    <h3>Welcom to the Meow-Type wiki !</h3>
+    <h6>Start by reading the <strong>Meow-Type</strong> and <strong>Architecture</strong> documentation. </h6></br>If you want to contribute, see the <strong>How to contribute</strong> documentation.</h6>
+    <p>Have fun!</p>
     <ul>
         {% for entry in entries %}
             <a href="{% url 'entry' entry %}"><li>{{ entry }}</li></a>

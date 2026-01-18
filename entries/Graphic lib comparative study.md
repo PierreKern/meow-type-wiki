@@ -1,226 +1,228 @@
+Here is the translation of the R-Type technical study regarding the choice of the graphical library.
+
 ## Introduction
 
-Dans le cadre du projet R-Type (B-CPP-500), le choix d'une bibliothèque graphique est crucial pour le développement du **client** d'un jeu 2D multijoueur performant et maintenable. Cette étude compare plusieurs solutions disponibles en C++ et justifie le choix de **SFML** pour l'implémentation du client graphique.
+As part of the R-Type project (B-CPP-500), choosing a graphics library is crucial for developing a high-performance and maintainable **client** for a 2D multiplayer game. This study compares several solutions available in C++ and justifies the choice of **SFML** for the implementation of the graphical client.
 
-**Note importante** : Cette étude se concentre sur le choix de la bibliothèque pour le **client**.
-
----
-
-## Critères d'Évaluation
-
-Pour comparer objectivement les bibliothèques graphiques, nous utilisons les critères suivants :
-
-1. **Facilité d'utilisation** : Courbe d'apprentissage, clarté de l'API
-2. **Performance** : Rendu 2D, gestion de multiples entités
-3. **Portabilité** : Support multiplateforme (Linux, Windows)
-4. **Fonctionnalités** : Rendu, audio, réseau, gestion des entrées
-5. **Documentation et communauté** : Qualité des ressources disponibles
-6. **Intégration** : Compatibilité avec CMake et gestionnaires de paquets
-7. **License** : Contraintes légales
-8. **Maturité du projet** : Stabilité, maintenance
+**Important Note**: This study focuses on the library choice for the **client**.
 
 ---
 
-## Bibliothèques Comparées
+## Evaluation Criteria
+
+To objectively compare the graphics libraries, we use the following criteria:
+
+1. **Ease of use**: Learning curve, API clarity.
+2. **Performance**: 2D rendering, management of multiple entities.
+3. **Portability**: Cross-platform support (Linux, Windows).
+4. **Features**: Rendering, audio, network, input management.
+5. **Documentation and community**: Quality of available resources.
+6. **Integration**: Compatibility with CMake and package managers.
+7. **License**: Legal constraints.
+8. **Project Maturity**: Stability, maintenance.
+
+---
+
+## Compared Libraries
 
 ### 1. SFML (Simple and Fast Multimedia Library)
 
-**Version actuelle** : 2.6.1 (3.0 en développement)
+**Current Version**: 2.6.1 (3.0 in development)
 
-### Avantages
+### Pros
 
-- **API orientée objet claire et intuitive** : Design moderne avec des classes bien organisées
-- **Modularité** : Système de modules (graphics, window, audio, network, system)
-- **Performance excellente en 2D** : Optimisée spécifiquement pour les jeux 2D
-- **Documentation de qualité** : Tutoriels complets, exemples nombreux
-- **Support natif du réseau (côté client)** : Module network intégré (UDP/TCP) pour la communication client vers serveur
-- **Gestion complète** : Graphismes, audio, fenêtrage, entrées utilisateur
-- **Large communauté** : Forum actif, nombreux projets open source
-- **Cross-platform mature** : Linux, Windows, macOS support stable
-- **Intégration facile** : Compatible avec Conan, vcpkg, CMake FetchContent
-- **License permissive** : zlib/png license (très permissive)
+* **Clear and intuitive Object-Oriented API**: Modern design with well-organized classes.
+* **Modularity**: System of modules (graphics, window, audio, network, system).
+* **Excellent 2D Performance**: Specifically optimized for 2D games.
+* **Quality Documentation**: Complete tutorials, numerous examples.
+* **Native Network Support (Client-side)**: Integrated network module (UDP/TCP) for client-to-server communication.
+* **Complete Management**: Graphics, audio, windowing, user inputs.
+* **Large Community**: Active forum, numerous open-source projects.
+* **Mature Cross-platform**: Stable support for Linux, Windows, macOS.
+* **Easy Integration**: Compatible with Conan, vcpkg, CMake FetchContent.
+* **Permissive License**: zlib/png license (very permissive).
 
-### Inconvénients
+### Cons
 
-- Pas de support natif 3D (mais suffisant pour R-Type)
-- Quelques abstractions peuvent limiter le contrôle bas niveau
-- Module réseau basique (mais suffisant pour le projet)
+* No native 3D support (but sufficient for R-Type).
+* Some abstractions may limit low-level control.
+* Basic network module (but sufficient for the project).
 
-### Cas d'usage R-Type
+### R-Type Use Case
 
-- ✅ Parfait pour un shoot'em up 2D (client graphique)
-- ✅ Module network adapté pour la communication client → serveur UDP
-- ✅ Gestion des sprites et animations fluide
-- ✅ Support audio pour effets sonores et musiques
-- ✅ Template/expérience préexistante dans l'équipe
+* ✅ Perfect for a 2D shoot 'em up (graphical client).
+* ✅ Network module adapted for UDP client → server communication.
+* ✅ Fluid sprite and animation management.
+* ✅ Audio support for sound effects and music.
+* ✅ Pre-existing template/experience within the team.
 
-**Score global** : ⭐⭐⭐⭐⭐ (9.5/10)
+**Global Score**: ⭐⭐⭐⭐⭐ (9.5/10)
 
 ---
 
 ### 2. SDL2 (Simple DirectMedia Layer 2)
 
-**Version actuelle** : 2.28.5
+**Current Version**: 2.28.5
 
-### Avantages
+### Pros
 
-- **Très mature et stable** : Plus de 25 ans d'existence
-- **Performance excellente** : Proche du matériel
-- **Portabilité exceptionnelle** : Supporte de nombreuses plateformes
-- **Contrôle fin** : Accès bas niveau quand nécessaire
-- **Écosystème riche** : SDL_image, SDL_mixer, SDL_ttf, SDL_net
-- **Industrie standard** : Utilisée dans de nombreux jeux commerciaux
-- **Documentation exhaustive** : Énorme quantité de ressources
-- **License permissive** : zlib license
+* **Very mature and stable**: Over 25 years of existence.
+* **Excellent Performance**: Close to hardware.
+* **Exceptional Portability**: Supports many platforms.
+* **Fine Control**: Low-level access when necessary.
+* **Rich Ecosystem**: SDL_image, SDL_mixer, SDL_ttf, SDL_net.
+* **Industry Standard**: Used in many commercial games.
+* **Exhaustive Documentation**: Huge amount of resources.
+* **Permissive License**: zlib license.
 
-### Inconvénients
+### Cons
 
-- **API C** : Plus verbeux en C++, nécessite des wrappers
-- **Moins orienté objet** : Design procédural
-- **Courbe d'apprentissage** : Plus complexe pour débutants
-- **Abstractions limitées** : Requiert plus de code "boilerplate"
-- **Pas de module réseau dans le core** : SDL_net est séparé et basique
+* **C API**: More verbose in C++, requires wrappers.
+* **Less Object-Oriented**: Procedural design.
+* **Learning Curve**: More complex for beginners.
+* **Limited Abstractions**: Requires more "boilerplate" code.
+* **No Core Network Module**: SDL_net is separate and basic.
 
-### Cas d'usage R-Type
+### R-Type Use Case
 
-- ✅ Performance suffisante pour le projet
-- ⚠️ Nécessite plus de code pour la même fonctionnalité
-- ⚠️ API C moins naturelle en C++
-- ❌ Pas de template/expérience dans l'équipe
+* ✅ Sufficient performance for the project.
+* ⚠️ Requires more code for the same functionality.
+* ⚠️ C API less natural in C++.
+* ❌ No pre-existing template/experience in the team.
 
-**Score global** : ⭐⭐⭐⭐ (7.5/10)
+**Global Score**: ⭐⭐⭐⭐ (7.5/10)
 
 ---
 
 ### 3. Raylib
 
-**Version actuelle** : 5.0
+**Current Version**: 5.0
 
-### Avantages
+### Pros
 
-- **Extrêmement simple** : API minimaliste et claire
-- **Moderne** : Design moderne avec bonnes pratiques
-- **Documentation excellente** : Tutoriels et exemples nombreux
-- **Tout-en-un** : Graphismes, audio, inputs dans un seul package
-- **Support 2D/3D** : Flexibilité si besoin d'évoluer
-- **Léger** : Empreinte mémoire faible
-- **Cross-platform** : Bon support multiplateforme
-- **License permissive** : zlib/png license
+* **Extremely Simple**: Minimalist and clear API.
+* **Modern**: Modern design with good practices.
+* **Excellent Documentation**: Numerous tutorials and examples.
+* **All-in-One**: Graphics, audio, inputs in a single package.
+* **2D/3D Support**: Flexibility if evolution is needed.
+* **Lightweight**: Low memory footprint.
+* **Cross-platform**: Good multiplatform support.
+* **Permissive License**: zlib/png license.
 
-### Inconvénients
+### Cons
 
-- **Moins mature** : Plus récent, moins de projets de référence
-- **Communauté plus petite** : Moins de ressources communautaires
-- **Pas de module réseau natif** : Nécessite bibliothèque externe
-- **API orientée C** : Similaire à SDL, moins naturelle en C++
-- **Moins d'abstractions haut niveau** : Pour certaines fonctionnalités avancées
+* **Less Mature**: Newer, fewer reference projects.
+* **Smaller Community**: Fewer community resources.
+* **No Native Network Module**: Requires external library.
+* **C-Oriented API**: Similar to SDL, less natural in C++.
+* **Fewer High-Level Abstractions**: For certain advanced features.
 
-### Cas d'usage R-Type
+### R-Type Use Case
 
-- ✅ Adapté pour le rendu 2D
-- ❌ Pas de support réseau intégré (critique pour R-Type)
-- ⚠️ Moins de références pour jeux multijoueurs
-- ❌ Pas de template/expérience dans l'équipe
+* ✅ Adapted for 2D rendering.
+* ❌ No integrated network support (critical for R-Type).
+* ⚠️ Fewer references for multiplayer games.
+* ❌ No pre-existing template/experience in the team.
 
-**Score global** : ⭐⭐⭐ (6.5/10)
+**Global Score**: ⭐⭐⭐ (6.5/10)
 
 ---
 
 ### 4. Allegro 5
 
-**Version actuelle** : 5.2.9
+**Current Version**: 5.2.9
 
-### Avantages
+### Pros
 
-- **Historique** : Bibliothèque éprouvée depuis les années 90
-- **Complète** : Audio, graphismes, inputs, primitives
-- **Performance solide** : Optimisée pour le 2D
-- **Cross-platform** : Support de nombreuses plateformes
-- **Addons modulaires** : Système d'extensions
+* **Historic**: Proven library since the 90s.
+* **Complete**: Audio, graphics, inputs, primitives.
+* **Solid Performance**: Optimized for 2D.
+* **Cross-platform**: Support for numerous platforms.
+* **Modular Addons**: Extension system.
 
-### Inconvénients
+### Cons
 
-- **Communauté en déclin** : Moins active qu'auparavant
-- **Documentation vieillissante** : Certaines ressources obsolètes
-- **API datée** : Design moins moderne que SFML/Raylib
-- **Moins de projets récents** : Moins d'exemples contemporains
-- **Pas de module réseau** : Non intégré
+* **Declining Community**: Less active than before.
+* **Aging Documentation**: Some resources are obsolete.
+* **Dated API**: Design less modern than SFML/Raylib.
+* **Fewer Recent Projects**: Fewer contemporary examples.
+* **No Network Module**: Not integrated.
 
-### Cas d'usage R-Type
+### R-Type Use Case
 
-- ⚠️ Fonctionnel mais moins moderne
-- ❌ Pas de support réseau natif
-- ❌ Communauté moins active
-- ❌ Pas de template/expérience dans l'équipe
+* ⚠️ Functional but less modern.
+* ❌ No native network support.
+* ❌ Less active community.
+* ❌ No pre-existing template/experience in the team.
 
-**Score global** : ⭐⭐ (5.5/10)
+**Global Score**: ⭐⭐ (5.5/10)
 
 ---
 
-## Tableau Comparatif Synthétique
+## Synthetic Comparison Table
 
-| Critère | SFML | SDL2 | Raylib | Allegro 5 |
+| Criteria | SFML | SDL2 | Raylib | Allegro 5 |
 | --- | --- | --- | --- | --- |
-| **Facilité d'utilisation (C++)** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
-| **Performance 2D** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| **Portabilité** | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| **Support réseau** | ⭐⭐⭐⭐ | ⭐⭐ | ❌ | ❌ |
+| **Ease of Use (C++)** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
+| **2D Performance** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+| **Portability** | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+| **Network Support** | ⭐⭐⭐⭐ | ⭐⭐ | ❌ | ❌ |
 | **Documentation** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
-| **Intégration CMake/Package Managers** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
-| **Communauté** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐ |
-| **Audio intégré** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| **Expérience équipe** | ⭐⭐⭐⭐⭐ | ⭐⭐ | ⭐ | ⭐ |
+| **CMake/Package Integration** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
+| **Community** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐ |
+| **Integrated Audio** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+| **Team Experience** | ⭐⭐⭐⭐⭐ | ⭐⭐ | ⭐ | ⭐ |
 
 ---
 
-## Justification du Choix : SFML
+## Justification of Choice: SFML
 
-### Raisons Principales
+### Main Reasons
 
-### 1. **Expérience Préexistante**
+### 1. **Pre-existing Experience**
 
-L'équipe dispose déjà d'une template SFML fonctionnelle. Cette base de code existante représente un avantage considérable :
+The team already has a functional SFML template. This existing codebase represents a considerable advantage:
 
-- Réduction du temps d'apprentissage
-- Code de démarrage déjà écrit et testé
-- Patterns et bonnes pratiques déjà établis
-- Gain de temps significatif sur le développement
+* Reduction in learning time.
+* Startup code already written and tested.
+* Patterns and best practices already established.
+* Significant time savings on development.
 
-### 2. **API Orientée Objet Moderne**
+### 2. **Modern Object-Oriented API**
 
-Contrairement à SDL2 ou Raylib (API C), SFML propose une API C++ native avec :
+Unlike SDL2 or Raylib (C APIs), SFML offers a native C++ API with:
 
 ```cpp
-// Exemple SFML - Naturel en C++
+// SFML Example - Natural in C++
 sf::RenderWindow window(sf::VideoMode(800, 600), "R-Type");
 sf::Sprite playerSprite;
 playerSprite.setTexture(texture);
 playerSprite.setPosition(100.f, 100.f);
 window.draw(playerSprite);
 
-// vs SDL2 - Plus verbeux
+// vs SDL2 - More verbose
 SDL_Window* window = SDL_CreateWindow("R-Type",
     SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
     800, 600, SDL_WINDOW_SHOWN);
 SDL_Renderer* renderer = SDL_CreateRenderer(window, -1,
     SDL_RENDERER_ACCELERATED);
-// ... plus de code boilerplate ...
+// ... more boilerplate code ...
 
 ```
 
-### 3. **Support Réseau Intégré (Côté Client)**
+### 3. **Integrated Network Support (Client-Side)**
 
-Le module `sf::Network` fournit :
+The `sf::Network` module provides:
 
-- Classes `sf::UdpSocket` et `sf::TcpSocket` prêtes à l'emploi pour le client
-- Gestion des paquets avec `sf::Packet` (sérialisation automatique)
-- API cohérente avec le reste de SFML
-- Parfaitement adapté pour la communication client → serveur de R-Type
+* Ready-to-use `sf::UdpSocket` and `sf::TcpSocket` classes for the client.
+* Packet management with `sf::Packet` (automatic serialization).
+* Consistent API with the rest of SFML.
+* Perfectly suited for R-Type client → server communication.
 
-**Note** : Le serveur utilise généralement Asio ou des sockets système directement (pas SFML), car il n'a pas besoin de rendu graphique. SFML côté client communique avec ce serveur.
+**Note**: The server generally uses Asio or system sockets directly (not SFML), as it does not need graphical rendering. The SFML client communicates with this server.
 
 ```cpp
-// Exemple UDP côté CLIENT avec SFML
+// UDP Example CLIENT side with SFML
 sf::UdpSocket socket;
 socket.bind(sf::Socket::AnyPort);
 sf::Packet packet;
@@ -229,48 +231,48 @@ socket.send(packet, serverIP, serverPort);
 
 ```
 
-### 4. **Modularité Alignée avec le Projet (Côté Client)**
+### 4. **Modularity Aligned with the Project (Client-Side)**
 
-L'architecture modulaire de SFML correspond parfaitement aux exigences du client :
+SFML's modular architecture perfectly matches the client's requirements:
 
-- **sf::Graphics** → Rendering Engine (client)
-- **sf::Network** → Client networking (communication avec le serveur)
-- **sf::Audio** → Audio Engine (client)
-- **sf::Window** → Input Management (client)
+* **sf::Graphics** → Rendering Engine (client)
+* **sf::Network** → Client networking (communication with the server)
+* **sf::Audio** → Audio Engine (client)
+* **sf::Window** → Input Management (client)
 
-Cette séparation facilite la création d'un client bien structuré avec des subsystèmes découplés.
+This separation facilitates the creation of a structured client with decoupled subsystems.
 
-**Architecture globale R-Type** :
+**Global R-Type Architecture**:
 
-- **Serveur** : Asio/sockets système + logique de jeu (pas de SFML)
-- **Client** : SFML (graphics + audio + input) + communication réseau vers serveur
+* **Server**: Asio/System sockets + Game logic (no SFML).
+* **Client**: SFML (graphics + audio + input) + Network communication to server.
 
-### 5. **Écosystème et Communauté**
+### 5. **Ecosystem and Community**
 
-- Documentation officielle complète et à jour
-- Forums actifs (SFML Forum)
-- Nombreux tutoriels et projets open source
-- Excellente intégration avec les outils modernes (CMake, Conan, vcpkg)
+* Complete and up-to-date official documentation.
+* Active forums (SFML Forum).
+* Numerous tutorials and open-source projects.
+* Excellent integration with modern tools (CMake, Conan, vcpkg).
 
-### 6. **Compatibilité avec les Exigences du Projet**
+### 6. **Compatibility with Project Requirements**
 
-✅ **CMake** : Excellent support, FindSFML.cmake disponible
+✅ **CMake**: Excellent support, FindSFML.cmake available.
 
-✅ **Package Managers** : Disponible sur Conan, vcpkg, et CPM
+✅ **Package Managers**: Available on Conan, vcpkg, and CPM.
 
-✅ **Cross-platform** : Linux et Windows support robuste
+✅ **Cross-platform**: Robust Linux and Windows support.
 
-✅ **Performance** : Optimisée pour les jeux 2D comme R-Type
+✅ **Performance**: Optimized for 2D games like R-Type.
 
-✅ **License** : zlib/png (permissive, pas de contraintes)
+✅ **License**: zlib/png (permissive, no constraints).
 
 ---
 
-## Considérations Techniques Spécifiques à R-Type
+## Technical Considerations Specific to R-Type
 
-### Gestion des Sprites et Animations
+### Sprite and Animation Management
 
-SFML offre un système de sprites efficace et intuitif :
+SFML offers an efficient and intuitive sprite system:
 
 ```cpp
 class AnimatedSprite {
@@ -290,42 +292,42 @@ class AnimatedSprite {
 
 ```
 
-### Architecture Réseau
+### Network Architecture
 
-**Architecture R-Type** :
+**R-Type Architecture**:
 
-- **Serveur** : Asio ou sockets système (BSD/Winsock), multithreadé, authoritative
-- **Client** : Module `sf::Network` de SFML pour communiquer avec le serveur
+* **Server**: Asio or system sockets (BSD/Winsock), multithreaded, authoritative.
+* **Client**: SFML `sf::Network` module to communicate with the server.
 
-Le module network de SFML s'intègre bien côté client :
+The SFML network module integrates well on the client side:
 
-- Les `sf::Packet` peuvent sérialiser les données à envoyer au serveur
-- Les sockets non-bloquants permettent l'intégration dans la game loop du client
-- Communication naturelle avec le serveur authoritative (UDP principalement)
+* `sf::Packet` can serialize data to be sent to the server.
+* Non-blocking sockets allow integration into the client game loop.
+* Natural communication with the authoritative server (primarily UDP).
 
 ```cpp
-// Côté CLIENT (SFML)
+// CLIENT Side (SFML)
 sf::UdpSocket clientSocket;
 clientSocket.setBlocking(false);
 
-// Envoi des inputs au serveur
+// Sending inputs to server
 sf::Packet inputPacket;
 inputPacket << playerID << inputState;
 clientSocket.send(inputPacket, serverIP, serverPort);
 
-// Réception des updates du serveur
+// Receiving server updates
 sf::Packet updatePacket;
 sf::IpAddress sender;
 unsigned short port;
 if (clientSocket.receive(updatePacket, sender, port) == sf::Socket::Done) {
-    // Traiter les updates du monde
+    // Process world updates
 }
 
 ```
 
-### Scrolling et Caméra
+### Scrolling and Camera
 
-SFML facilite la gestion du starfield scrolling :
+SFML facilitates starfield scrolling management:
 
 ```cpp
 sf::View camera;
@@ -337,89 +339,94 @@ window.setView(camera);
 
 ---
 
-## Alternatives Écartées et Pourquoi
+## Discarded Alternatives and Why
 
-### Pourquoi pas SDL2 ?
+### Why not SDL2?
 
-Bien que SDL2 soit excellent, il présente des inconvénients pour notre contexte :
+Although SDL2 is excellent, it has drawbacks for our context:
 
-- API C nécessitant des wrappers en C++
-- Pas d'expérience préalable dans l'équipe
-- Module réseau (SDL_net) moins mature que sf::Network
-- Plus de code "boilerplate" pour les mêmes fonctionnalités
+* C API requiring wrappers in C++.
+* No prior experience within the team.
+* Network module (SDL_net) less mature than sf::Network.
+* More "boilerplate" code for the same features.
 
-### Pourquoi pas Raylib ?
+### Why not Raylib?
 
-- Absence de module réseau natif (critique pour R-Type)
-- Communauté plus petite, moins de ressources pour le multijoueur
-- Pas de base de code existante dans l'équipe
+* Absence of native network module (critical for R-Type).
+* Smaller community, fewer resources for multiplayer.
+* No existing codebase within the team.
 
-### Pourquoi pas un moteur complet (Unity, Godot, UE) ?
+### Why not a complete engine (Unity, Godot, UE)?
 
-Le sujet interdit explicitement les moteurs de jeu complets :
+The subject explicitly forbids complete game engines:
 
 > "libraries with a too broad scope, or existing game engines (UE, Unity, Godot, etc.) are strictly forbidden"
-> 
 
-L'objectif pédagogique est de construire notre propre architecture de moteur.
+The pedagogical objective is to build our own engine architecture.
 
 ---
 
-## Risques et Mitigations
+## Risks and Mitigations
 
-### Risques Identifiés
+### Identified Risks
 
-1. **Module réseau SFML basique**
-    - **Mitigation** : Suffisant pour R-Type, possibilité d'utiliser Asio en complément si nécessaire
-2. **Pas de support 3D**
-    - **Mitigation** : Non nécessaire pour un shoot'em up 2D horizontal
-3. **Évolution vers SFML 3.0**
-    - **Mitigation** : SFML 2.6 est stable, migration vers 3.0 possible ultérieurement si besoin
+1. **Basic SFML Network Module**
+* **Mitigation**: Sufficient for R-Type, possibility to use Asio as a supplement if necessary.
 
-### Points de Vigilance
 
-- Bien encapsuler les dépendances SFML pour faciliter les tests
-- Créer des abstractions si nécessaire (ex: interface IRenderer)
-- Documenter les choix d'architecture liés à SFML
+2. **No 3D Support**
+* **Mitigation**: Not necessary for a horizontal 2D shoot 'em up.
+
+
+3. **Evolution towards SFML 3.0**
+* **Mitigation**: SFML 2.6 is stable, migration to 3.0 possible later if needed.
+
+
+
+### Vigilance Points
+
+* Encapsulate SFML dependencies well to facilitate testing.
+* Create abstractions if necessary (e.g., IRenderer interface).
+* Document architectural choices related to SFML.
 
 ---
 
 ## Conclusion
 
-**Le choix de SFML pour le client R-Type est optimal** pour les raisons suivantes :
+**The choice of SFML for the R-Type client is optimal** for the following reasons:
 
-1. ✅ **Expérience technique** : Template existante, courbe d'apprentissage réduite
-2. ✅ **API moderne C++** : Naturelle pour un projet en C++, orientée objet
-3. ✅ **Fonctionnalités complètes côté client** : Graphics, Audio, Network, Input en un seul package
-4. ✅ **Support réseau client** : Module network adapté pour communiquer avec le serveur
-5. ✅ **Performance** : Optimisée pour les jeux 2D rapides comme les shmups
-6. ✅ **Compatibilité projet** : CMake, package managers, cross-platform
-7. ✅ **Écosystème** : Documentation, communauté, exemples abondants
-8. ✅ **Modularité** : Architecture claire pour le client graphique
+1. ✅ **Technical Experience**: Existing template, reduced learning curve.
+2. ✅ **Modern C++ API**: Natural for a C++ project, object-oriented.
+3. ✅ **Complete Client-Side Features**: Graphics, Audio, Network, Input in a single package.
+4. ✅ **Client Network Support**: Network module adapted to communicate with the server.
+5. ✅ **Performance**: Optimized for fast 2D games like shmups.
+6. ✅ **Project Compatibility**: CMake, package managers, cross-platform.
+7. ✅ **Ecosystem**: Documentation, community, abundant examples.
+8. ✅ **Modularity**: Clear architecture for the graphical client.
 
-**Architecture globale R-Type** :
+**Global R-Type Architecture**:
 
-- **Client** : SFML (rendu + audio + input + communication serveur)
-- **Serveur** : Asio/sockets système + logique de jeu authoritative (pas de SFML)
+* **Client**: SFML (rendering + audio + input + server communication).
+* **Server**: Asio/System sockets + Authoritative game logic (no SFML).
 
-SFML permet de se concentrer sur l'implémentation du client (interface graphique, rendu, interactions utilisateur) et sur la communication avec le serveur, tout en offrant la flexibilité nécessaire pour créer une architecture client propre et maintenable.
-
----
-
-## Références
-
-- [Documentation officielle SFML](https://www.sfml-dev.org/documentation/2.6.1-fr/)
-- [SFML Forum](https://en.sfml-dev.org/forums/)
-- [SFML Game Development Book](https://www.packtpub.com/product/sfml-game-development/9781849696845)
-- [SDL2 Documentation](https://wiki.libsdl.org/)
-- [Raylib Documentation](https://www.raylib.com/)
-- [Game Networking Resources](https://github.com/MFatihMAR/Game-Networking-Resources)
-- [Fast-Paced Multiplayer](https://www.gabrielgambetta.com/client-server-game-architecture.html)
+SFML allows us to focus on implementing the client (graphical interface, rendering, user interactions) and communicating with the server, while offering the flexibility needed to create a clean and maintainable client architecture.
 
 ---
 
-*Document réalisé dans le cadre du projet B-CPP-500 R-Type - EPITECH Nancy*
+## References
 
-*Auteur : Maylle*
+* [Official SFML Documentation](https://www.sfml-dev.org/documentation/2.6.1/)
+* [SFML Forum](https://en.sfml-dev.org/forums/)
+* [SFML Game Development Book](https://www.packtpub.com/product/sfml-game-development/9781849696845)
+* [SDL2 Documentation](https://wiki.libsdl.org/)
+* [Raylib Documentation](https://www.raylib.com/)
+* [Game Networking Resources](https://github.com/MFatihMAR/Game-Networking-Resources)
+* [Fast-Paced Multiplayer](https://www.gabrielgambetta.com/client-server-game-architecture.html)
 
-*Date : 25 novembre 2025*
+---
+
+*Document produced as part of project B-CPP-500 R-Type - EPITECH Nancy*
+
+*Author: Maylle*
+
+*Date: November 25, 2025*

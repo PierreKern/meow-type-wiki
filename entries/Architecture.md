@@ -440,7 +440,15 @@ classDiagram
 
 ## 5. Client
 
-This part is not finished yet.
+The client is the part that diplay the **Game**.
+
+It also use the ECS, and implement his own **SFML Template**.
+
+Since it is a long part, we let you discover it by reading theses documentation :
+
+
+* [R-Type Client Guide](https://meow-type-wiki.onrender.com/wiki/Client%20Guide)
+* [Create a New Scene](https://meow-type-wiki.onrender.com/wiki/Create%20a%20new%20scene)
 
 ## 6. Conclusion
 
