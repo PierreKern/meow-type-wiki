@@ -1036,7 +1036,7 @@ _sprites.create("my_sprite", "my_asset", {x, y});
 
 ## 🔗 See Also
 
-* [SFML Template Documentation](https://meow-type-wiki.onrender.com/wiki/)
+* [SFML Template Documentation](https://meow-type-wiki.onrender.com/wiki/SFML%20Template)
 * [Guide: Create a New Scene](https://meow-type-wiki.onrender.com/wiki/Accessibility)
 * [Server Documentation](https://www.google.com/search?q=../../server/docs/) (if available)
 

@@ -574,5 +574,5 @@ void MyScene::handleEvents(const sf::Event& event, sf::RenderWindow& window) {
 
 ## 🔗 See Also
 
-* [SFML Template Documentation](https://https://meow-type-wiki.onrender.com//TEMPLATE_SFML.md)
-* [R-Type Client Guide](https://www.google.com/search?q=./CLIENT_GUIDE.md)
+* [SFML Template Documentation](https://meow-type-wiki.onrender.com/wiki/SFML%20Template)
+* [R-Type Client Guide](https://meow-type-wiki.onrender.com/wiki/Create%20a%20new%20scene)
